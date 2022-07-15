@@ -1,0 +1,41 @@
+
+#image: fantito/jdk11-maven-git:latest
+
+build:
+    tags:
+      - docker
+    stage: build
+    image: maven:3.6-jdk-11
+    script:
+     # - ./mvn package -Dmaven.repo.local=.m2
+    #  - Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+     # - mvn org.apache.maven.plugins:maven-compiler-plugin:3.5.1:compile
+      #- mvn compiler:compile
+     # - mvn compile
+     - mvn install
+     - mvn package
+     
+    # - mvn clean package -P dev
+     # - "mvn package"  
+     # - "mv ~/.m2/ ~/m2-save/"
+     # - "mvn clean package"
+      
+test:
+    tags:
+     - docker
+    stage: test
+    script:
+        - mvn compile
+
+deploy:
+  stage: deploy
+  image: maven:3.6-jdk-11
+  tags:
+      - docker
+  script:
+    - echo "This job deploys something. It will only run when all jobs in the"
+    - echo "test stage complete."
+    - mvn compile
+
+
+
